@@ -75,6 +75,39 @@ void cariBuah(Buah* head) {
     }
 }
 
+// Fungsi untuk menghapus buah berdasarkan nama
+// Jika buah ditemukan, hapus buah tersebut dan tampilkan pesan berhasil
+// Jika tidak ditemukan, tampilkan pesan "Buah tidak ditemukan"
+void hapusBuah(Buah*& head) {
+    if (head == nullptr) {
+        cout << "Belum ada buah.\n";
+        return;
+    }
+    cin.ignore();
+    string hapusNama;
+    cout << "Masukkan nama buah yang ingin dihapus: ";
+    getline(cin, hapusNama);
+
+    Buah* temp = head;
+    Buah* prev = nullptr;
+    while (temp != nullptr) {
+        if (temp->nama == hapusNama) {
+            if (prev == nullptr) {
+                // Hapus head
+                head = temp->next;
+            } else {
+                prev->next = temp->next;
+            }
+            delete temp;
+            cout << "Buah berhasil dihapus.\n";
+            return;
+        }
+        prev = temp;
+        temp = temp->next;
+    }
+    cout << "Buah tidak ditemukan.\n";
+}
+
 int main() {
     Buah* head = nullptr;
     int pilihan;
@@ -99,7 +132,7 @@ int main() {
                 break;
             case 3:
                 cout << "Fitur Cari buah\n";
-                // Tambahkan kode cari buah di sini
+                cariBuah(head);
                 break;
             case 4:
                 cout << "Fitur Hapus buah\n";

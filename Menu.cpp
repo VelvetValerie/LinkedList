@@ -31,6 +31,19 @@ void tambahBarang(Barang*& head) {
     cout << "Buah berhasil ditambahkan!\n";
 }
 
+void daftarBarang(Barang* head) {
+    if (head == nullptr) {
+        cout << "Belum ada barang.\n";
+        return;
+    }
+    cout << "Daftar Barang:\n";
+    int no = 1;
+    while (head != nullptr) {
+        cout << no++ << ". " << head->nama << " (Jumlah: " << head->jumlah << ")\n";
+        head = head->next;
+    }
+}
+
 int main() {
     int pilihan;
     do {

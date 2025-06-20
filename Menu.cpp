@@ -118,6 +118,7 @@ void hapusBuah(Buah*& head) {
             cout << "Belum ada buah.\n";
             return;
         }
+        cin.ignore(); // Tambahkan baris ini untuk membersihkan buffer
         string hapusNama;
         cout << "Masukkan nama buah yang ingin dihapus: ";
         getline(cin, hapusNama);

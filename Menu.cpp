@@ -136,7 +136,7 @@ int main() {
                 break;
             case 4:
                 cout << "Fitur Hapus buah\n";
-                // Tambahkan kode hapus buah di sini
+                hapusBuah(head);
                 break;
             case 0:
                 cout << "Keluar dari program.\n";

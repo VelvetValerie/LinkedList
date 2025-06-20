@@ -10,6 +10,7 @@ struct Buah {
 };
 
 //Fungsi untuk menambahkan buah
+//Jika daftar buah tidak ada, maka buah baru akan menjadi head
 void tambahBuah(Buah*& head) {
     Buah* baru = new Buah();
     cout << "Masukkan nama buah: ";
@@ -31,6 +32,8 @@ void tambahBuah(Buah*& head) {
     cout << "Buah berhasil ditambahkan!\n";
 }
 
+//Fungsi untuk menampilkan daftar buah
+//Jika daftar buah kosong, maka tampil pesan "Belum ada buah"
 void daftarBuah(Buah* head) {
     if (head == nullptr) {
         cout << "Belum ada buah.\n";
@@ -44,26 +47,55 @@ void daftarBuah(Buah* head) {
     }
 }
 
+//Fungsi untuk mencari buah berdasarkan nama
+//Jika buah ada pada daftar, tampilkan nama dan jumlahnya
+//Jika tidak ada, maka pesan "Buah tidak ditemukan" akan tampil.
+void cariBuah(Buah* head) {
+    if (head == nullptr) {
+        cout << "Belum ada buah.\n";
+        return;
+    }
+    cin.ignore();
+    string cari;
+    cout << "Masukkan nama buah yang dicari: ";
+    getline(cin, cari);
+
+    Buah* temp = head;
+    bool ditemukan = false;
+    while (temp != nullptr) {
+        if (temp->nama == cari) {
+            cout << "Buah ditemukan: " << temp->nama << " (Jumlah: " << temp->jumlah << ")\n";
+            ditemukan = true;
+            break;
+        }
+        temp = temp->next;
+    }
+    if (!ditemukan) {
+        cout << "Buah tidak ditemukan.\n";
+    }
+}
+
 int main() {
+    Buah* head = nullptr;
     int pilihan;
     do {
-        cout << "=== Menu Inventori ===" << endl;
-        cout << "1. Tambah Buah" << endl;
-        cout << "2. Daftar Buah" << endl;
-        cout << "3. Cari Buah" << endl;
-        cout << "4. Hapus Buah" << endl;
-        cout << "0. Keluar" << endl;
+        cout << "\n=== Menu Inventori ===\n" << endl;
+        cout << "1. Tambah Buah\n" << endl;
+        cout << "2. Daftar Buah\n" << endl;
+        cout << "3. Cari Buah\n" << endl;
+        cout << "4. Hapus Buah\n" << endl;
+        cout << "0. Keluar\n" << endl;
         cout << "Pilih menu: ";
         cin >> pilihan;
 
         switch(pilihan) {
             case 1:
                 cout << "Fitur Tambah buah\n";
-                // Tambahkan kode tambah buah di sini
+                tambahBuah(head);
                 break;
             case 2:
                 cout << "Fitur Daftar buah\n";
-                // Tambahkan kode daftar buah di sini
+                daftarBuah(head);
                 break;
             case 3:
                 cout << "Fitur Cari buah\n";
@@ -82,5 +114,10 @@ int main() {
         cout << endl;
     } while(pilihan != 0);
 
+    while (head != nullptr) {
+        Buah* hapus = head;
+        head = head->next;
+        delete hapus;
+    }
     return 0;
 }

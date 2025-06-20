@@ -13,14 +13,28 @@ struct Buah {
 //Jika daftar buah tidak ada, maka buah baru akan menjadi head
 void tambahBuah(Buah*& head) {
     Buah* baru = new Buah();
-    cout << "Masukkan nama buah: ";
     cin.ignore();
-    getline(cin, baru->nama);
-    cout << "Masukkan jumlah: ";
-    cin >> baru->jumlah;
+    do {
+        cout << "Masukkan nama buah: ";
+        getline(cin, baru->nama);
+        if (baru->nama.empty()) {
+            cout << "Nama buah tidak boleh kosong!\n";
+        }
+    } while (baru->nama.empty());
+
+    do {
+        cout << "Masukkan jumlah: ";
+        cin >> baru->jumlah;
+        if (cin.fail() || baru->jumlah <= 0) {
+            cout << "Jumlah harus angka positif!\n";
+            cin.clear();
+            cin.ignore(1000, '\n');
+        }
+    } while (baru->jumlah <= 0);
+
     baru->next = nullptr;
 
-     if (head == nullptr) {
+    if (head == nullptr) {
         head = baru;
     } else {
         Buah* temp = head;

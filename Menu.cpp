@@ -2,16 +2,16 @@
 #include <string>
 using namespace std;
 
-//Struktur node barang
-struct Barang {
+//Struktur node buah
+struct Buah {
     string nama;
     int jumlah;
-    Barang* next;
+    Buah* next;
 };
 
-//Fungsi untuk menambahkan barang
-void tambahBarang(Barang*& head) {
-    Barang* baru = new Barang();
+//Fungsi untuk menambahkan buah
+void tambahBuah(Buah*& head) {
+    Buah* baru = new Buah();
     cout << "Masukkan nama buah: ";
     cin.ignore();
     getline(cin, baru->nama);
@@ -22,7 +22,7 @@ void tambahBarang(Barang*& head) {
      if (head == nullptr) {
         head = baru;
     } else {
-        Barang* temp = head;
+        Buah* temp = head;
         while (temp->next != nullptr) {
             temp = temp->next;
         }
@@ -31,12 +31,12 @@ void tambahBarang(Barang*& head) {
     cout << "Buah berhasil ditambahkan!\n";
 }
 
-void daftarBarang(Barang* head) {
+void daftarBuah(Buah* head) {
     if (head == nullptr) {
-        cout << "Belum ada barang.\n";
+        cout << "Belum ada buah.\n";
         return;
     }
-    cout << "Daftar Barang:\n";
+    cout << "Daftar Buah:\n";
     int no = 1;
     while (head != nullptr) {
         cout << no++ << ". " << head->nama << " (Jumlah: " << head->jumlah << ")\n";
@@ -58,20 +58,20 @@ int main() {
 
         switch(pilihan) {
             case 1:
-                cout << "Fitur Tambah Barang\n";
-                // Tambahkan kode tambah barang di sini
+                cout << "Fitur Tambah buah\n";
+                // Tambahkan kode tambah buah di sini
                 break;
             case 2:
-                cout << "Fitur Daftar Barang\n";
-                // Tambahkan kode daftar barang di sini
+                cout << "Fitur Daftar buah\n";
+                // Tambahkan kode daftar buah di sini
                 break;
             case 3:
-                cout << "Fitur Cari Barang\n";
-                // Tambahkan kode cari barang di sini
+                cout << "Fitur Cari buah\n";
+                // Tambahkan kode cari buah di sini
                 break;
             case 4:
-                cout << "Fitur Hapus Barang\n";
-                // Tambahkan kode hapus barang di sini
+                cout << "Fitur Hapus buah\n";
+                // Tambahkan kode hapus buah di sini
                 break;
             case 0:
                 cout << "Keluar dari program.\n";

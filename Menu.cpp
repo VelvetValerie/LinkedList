@@ -19,79 +19,15 @@ void hapusBuah(Buah*& head);
 void urutkanBuah(Buah* head); 
 void tukarData(Buah* a, Buah* b);
 
-// --- Fungsi Utama (main) ---
-int main() {
-    Buah* head = nullptr;
-    int pilihan;
-
-    do {
-        // DIUBAH: Tampilan menu dibuat sedikit lebih rapi dan ada tambahan opsi baru.
-        cout << "\n===============================\n";
-        cout << "===   Menu Inventori Buah   ===\n";
-        cout << "===============================\n";
-        cout << "1. Tambah Buah\n";
-        cout << "2. Lihat Daftar Buah\n";
-        cout << "3. Cari Buah\n";
-        cout << "4. Hapus Buah\n";
-        cout << "5. Urutkan Daftar Buah\n"; // DITAMBAHKAN: Opsi menu baru.
-        cout << "0. Keluar\n";
-        cout << "===============================\n";
-        cout << "Pilih menu: ";
-
-        cin >> pilihan;
-
-        // DITAMBAHKAN: Blok validasi untuk memastikan input adalah angka.
-        if (cin.fail()) {
-            cout << "\n[ERROR] Input tidak valid. Harap masukkan angka sesuai menu.\n";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            pilihan = -1;
-            continue;
-        }
-        
-        // DITAMBAHKAN: Baris krusial untuk membersihkan buffer input setelah `cin >>`.
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
-        switch(pilihan) {
-            case 1:
-                tambahBuah(head);
-                break;
-            case 2:
-                daftarBuah(head);
-                break;
-            case 3:
-                cariBuah(head);
-                break;
-            case 4:
-                hapusBuah(head);
-                break;
-            // DITAMBAHKAN: Case untuk memanggil fungsi baru.
-            case 5:
-                urutkanBuah(head);
-                break;
-            case 0:
-                cout << "\nKeluar dari program...\n";
-                break;
-            default:
-                cout << "\n[ERROR] Pilihan tidak valid. Silakan coba lagi.\n";
-        }
-        
-        // DITAMBAHKAN: Blok untuk menjeda program agar pengguna bisa melihat output sebelum kembali ke menu.
-        if (pilihan != 0) {
-             cout << "\nTekan Enter untuk kembali ke menu...";
-             cin.get();
-        }
-
-    } while(pilihan != 0);
-
-    // Pembersihan memori (Tidak ada perubahan, sudah benar dari awal)
-    while (head != nullptr) {
-        Buah* hapus = head;
-        head = head->next;
-        delete hapus;
-    }
-    
-    return 0;
+// --- FUNGSI BARU ---
+// DITAMBAHKAN: Fungsi pembantu untuk menukar data, digunakan oleh urutkanBuah.
+void tukarData(Buah* a, Buah* b) {
+    string tempNama = a->nama;
+    int tempJumlah = a->jumlah;
+    a->nama = b->nama;
+    a->jumlah = b->jumlah;
+    b->nama = tempNama;
+    b->jumlah = tempJumlah;
 }
 
 // --- Implementasi Fungsi ---
@@ -258,13 +194,77 @@ void urutkanBuah(Buah* head) {
     cout << "Pilih menu '2. Lihat Daftar Buah' untuk melihat hasilnya.\n";
 }
 
-// --- FUNGSI BARU ---
-// DITAMBAHKAN: Fungsi pembantu untuk menukar data, digunakan oleh urutkanBuah.
-void tukarData(Buah* a, Buah* b) {
-    string tempNama = a->nama;
-    int tempJumlah = a->jumlah;
-    a->nama = b->nama;
-    a->jumlah = b->jumlah;
-    b->nama = tempNama;
-    b->jumlah = tempJumlah;
+// --- Fungsi Utama (main) ---
+int main() {
+    Buah* head = nullptr;
+    int pilihan;
+
+    do {
+        // DIUBAH: Tampilan menu dibuat sedikit lebih rapi dan ada tambahan opsi baru.
+        cout << "\n===============================\n";
+        cout << "===   Menu Inventori Buah   ===\n";
+        cout << "===============================\n";
+        cout << "1. Tambah Buah\n";
+        cout << "2. Lihat Daftar Buah\n";
+        cout << "3. Cari Buah\n";
+        cout << "4. Hapus Buah\n";
+        cout << "5. Urutkan Daftar Buah\n"; // DITAMBAHKAN: Opsi menu baru.
+        cout << "0. Keluar\n";
+        cout << "===============================\n";
+        cout << "Pilih menu: ";
+
+        cin >> pilihan;
+
+        // DITAMBAHKAN: Blok validasi untuk memastikan input adalah angka.
+        if (cin.fail()) {
+            cout << "\n[ERROR] Input tidak valid. Harap masukkan angka sesuai menu.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            pilihan = -1;
+            continue;
+        }
+        
+        // DITAMBAHKAN: Baris krusial untuk membersihkan buffer input setelah `cin >>`.
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        switch(pilihan) {
+            case 1:
+                tambahBuah(head);
+                break;
+            case 2:
+                daftarBuah(head);
+                break;
+            case 3:
+                cariBuah(head);
+                break;
+            case 4:
+                hapusBuah(head);
+                break;
+            // DITAMBAHKAN: Case untuk memanggil fungsi baru.
+            case 5:
+                urutkanBuah(head);
+                break;
+            case 0:
+                cout << "\nKeluar dari program...\n";
+                break;
+            default:
+                cout << "\n[ERROR] Pilihan tidak valid. Silakan coba lagi.\n";
+        }
+        
+        // DITAMBAHKAN: Blok untuk menjeda program agar pengguna bisa melihat output sebelum kembali ke menu.
+        if (pilihan != 0) {
+             cout << "\nTekan Enter untuk kembali ke menu...";
+             cin.get();
+        }
+
+    } while(pilihan != 0);
+
+    // Pembersihan memori (Tidak ada perubahan, sudah benar dari awal)
+    while (head != nullptr) {
+        Buah* hapus = head;
+        head = head->next;
+        delete hapus;
+    }
+    
+    return 0;
 }

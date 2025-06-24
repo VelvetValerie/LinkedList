@@ -1,26 +1,110 @@
 #include <iostream>
 #include <string>
+#include <limits> // DITAMBAHKAN: Library untuk menangani buffer input dengan lebih baik.
+
 using namespace std;
 
-//Struktur node buah
+// Struktur Buah (Tidak ada perubahan)
 struct Buah {
     string nama;
     int jumlah;
     Buah* next;
 };
 
-//Fungsi untuk menambahkan buah
-//Jika daftar buah tidak ada, maka buah baru akan menjadi head
-void tambahBuah(Buah*& head) {
-    char ulang;
+// DITAMBAHKAN: Deklarasi fungsi (prototypes) untuk praktik pemrograman yang baik.
+void tambahBuah(Buah*& head);
+void daftarBuah(Buah* head);
+void cariBuah(Buah* head);
+void hapusBuah(Buah*& head);
+void urutkanBuah(Buah* head); 
+void tukarData(Buah* a, Buah* b);
+
+// --- Fungsi Utama (main) ---
+int main() {
+    Buah* head = nullptr;
+    int pilihan;
+
     do {
+        // DIUBAH: Tampilan menu dibuat sedikit lebih rapi dan ada tambahan opsi baru.
+        cout << "\n===============================\n";
+        cout << "===   Menu Inventori Buah   ===\n";
+        cout << "===============================\n";
+        cout << "1. Tambah Buah\n";
+        cout << "2. Lihat Daftar Buah\n";
+        cout << "3. Cari Buah\n";
+        cout << "4. Hapus Buah\n";
+        cout << "5. Urutkan Daftar Buah\n"; // DITAMBAHKAN: Opsi menu baru.
+        cout << "0. Keluar\n";
+        cout << "===============================\n";
+        cout << "Pilih menu: ";
+
+        cin >> pilihan;
+
+        // DITAMBAHKAN: Blok validasi untuk memastikan input adalah angka.
+        if (cin.fail()) {
+            cout << "\n[ERROR] Input tidak valid. Harap masukkan angka sesuai menu.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            pilihan = -1;
+            continue;
+        }
+        
+        // DITAMBAHKAN: Baris krusial untuk membersihkan buffer input setelah `cin >>`.
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        switch(pilihan) {
+            case 1:
+                tambahBuah(head);
+                break;
+            case 2:
+                daftarBuah(head);
+                break;
+            case 3:
+                cariBuah(head);
+                break;
+            case 4:
+                hapusBuah(head);
+                break;
+            // DITAMBAHKAN: Case untuk memanggil fungsi baru.
+            case 5:
+                urutkanBuah(head);
+                break;
+            case 0:
+                cout << "\nKeluar dari program...\n";
+                break;
+            default:
+                cout << "\n[ERROR] Pilihan tidak valid. Silakan coba lagi.\n";
+        }
+        
+        // DITAMBAHKAN: Blok untuk menjeda program agar pengguna bisa melihat output sebelum kembali ke menu.
+        if (pilihan != 0) {
+             cout << "\nTekan Enter untuk kembali ke menu...";
+             cin.get();
+        }
+
+    } while(pilihan != 0);
+
+    // Pembersihan memori (Tidak ada perubahan, sudah benar dari awal)
+    while (head != nullptr) {
+        Buah* hapus = head;
+        head = head->next;
+        delete hapus;
+    }
+    
+    return 0;
+}
+
+// --- Implementasi Fungsi ---
+
+// DIUBAH: Fungsi ini sekarang hanya menambahkan satu buah dan kembali ke menu.
+void tambahBuah(Buah*& head) {
     Buah* baru = new Buah();
-    cin.ignore();
+    // ... (Logika input dan validasi tetap sama)
     do {
         cout << "Masukkan nama buah: ";
         getline(cin, baru->nama);
         if (baru->nama.empty()) {
-            cout << "Nama buah tidak boleh kosong!\n";
+            cout << "[ERROR] Nama buah tidak boleh kosong!\n";
         }
     } while (baru->nama.empty());
 
@@ -28,14 +112,14 @@ void tambahBuah(Buah*& head) {
         cout << "Masukkan jumlah: ";
         cin >> baru->jumlah;
         if (cin.fail() || baru->jumlah <= 0) {
-            cout << "Jumlah harus angka positif!\n";
+            cout << "[ERROR] Jumlah harus angka positif!\n";
             cin.clear();
-            cin.ignore(1000, '\n');
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            baru->jumlah = 0;
         }
     } while (baru->jumlah <= 0);
 
     baru->next = nullptr;
-
     if (head == nullptr) {
         head = baru;
     } else {
@@ -45,46 +129,35 @@ void tambahBuah(Buah*& head) {
         }
         temp->next = baru;
     }
-    cout << "Buah berhasil ditambahkan!\n";
-    cout << "Tambah buah lagi? (y/n): ";
-        cin >> ulang;
-        cin.ignore();
-    } while (ulang == 'y' || ulang == 'Y');
+    cout << "\nBuah '" << baru->nama << "' berhasil ditambahkan!\n";
+
+    // DIHAPUS: Perulangan "Tambah buah lagi? (y/n)" yang tadinya ada di dalam fungsi ini.
 }
 
-//Fungsi untuk menampilkan daftar buah
-//Jika daftar buah kosong, maka tampil pesan "Belum ada buah"
+// DIUBAH: Sama seperti fungsi lainnya, perulangan internal dihapus.
 void daftarBuah(Buah* head) {
-    char ulang;
-    do {
-        if (head == nullptr) {
-            cout << "Belum ada buah.\n";
-        } else {
-            cout << "Daftar Buah:\n";
-            int no = 1;
-            Buah* temp = head;
-            while (temp != nullptr) {
-                cout << no++ << ". " << temp->nama << " (Jumlah: " << temp->jumlah << ")\n";
-                temp = temp->next;
-            }
+    cout << "\n--- Daftar Buah ---\n";
+    if (head == nullptr) {
+        cout << "Belum ada buah di dalam inventori.\n";
+    } else {
+        int no = 1;
+        Buah* temp = head;
+        while (temp != nullptr) {
+            cout << no++ << ". " << temp->nama << " (Jumlah: " << temp->jumlah << ")\n";
+            temp = temp->next;
         }
-        cout << "Lihat daftar buah lagi? (y/n): ";
-        cin >> ulang;
-        cin.ignore();
-    } while (ulang == 'y' || ulang == 'Y');
+    }
+    cout << "--------------------\n";
+    
+    // DIHAPUS: Perulangan "Lihat daftar buah lagi? (y/n)".
 }
 
-//Fungsi untuk mencari buah berdasarkan nama
-//Jika buah ada pada daftar, tampilkan nama dan jumlahnya
-//Jika tidak ada, maka pesan "Buah tidak ditemukan" akan tampil.
+// DIUBAH: Perulangan internal dihapus.
 void cariBuah(Buah* head) {
-    char ulang;
-    do {
     if (head == nullptr) {
-        cout << "Belum ada buah.\n";
+        cout << "\nInventori masih kosong.\n";
         return;
     }
-    cin.ignore();
     string cari;
     cout << "Masukkan nama buah yang dicari: ";
     getline(cin, cari);
@@ -93,106 +166,105 @@ void cariBuah(Buah* head) {
     bool ditemukan = false;
     while (temp != nullptr) {
         if (temp->nama == cari) {
-            cout << "Buah ditemukan: " << temp->nama << " (Jumlah: " << temp->jumlah << ")\n";
+            cout << "\nBuah ditemukan: " << temp->nama << " (Jumlah: " << temp->jumlah << ")\n";
             ditemukan = true;
             break;
         }
         temp = temp->next;
     }
     if (!ditemukan) {
-        cout << "Buah tidak ditemukan.\n";
+        cout << "\nBuah dengan nama '" << cari << "' tidak ditemukan.\n";
     }
-    cout << "Cari buah lagi? (y/n): ";
-        cin >> ulang;
-        cin.ignore();
-    } while (ulang == 'y' || ulang == 'Y');
+
+    // DIHAPUS: Perulangan "Cari buah lagi? (y/n)".
 }
 
-// Fungsi untuk menghapus buah berdasarkan nama
-// Jika buah ditemukan, hapus buah tersebut dan tampilkan pesan berhasil
-// Jika tidak ditemukan, tampilkan pesan "Buah tidak ditemukan"
+// DIUBAH: Perulangan internal dihapus.
 void hapusBuah(Buah*& head) {
-    char ulang;
-    do {
-        if (head == nullptr) {
-            cout << "Belum ada buah.\n";
-            return;
-        }
-        cin.ignore(); // Tambahkan baris ini untuk membersihkan buffer
-        string hapusNama;
-        cout << "Masukkan nama buah yang ingin dihapus: ";
-        getline(cin, hapusNama);
+    if (head == nullptr) {
+        cout << "\nInventori masih kosong.\n";
+        return;
+    }
+    string hapusNama;
+    cout << "Masukkan nama buah yang ingin dihapus: ";
+    getline(cin, hapusNama);
 
-        Buah* temp = head;
-        Buah* prev = nullptr;
-        bool ditemukan = false;
-        while (temp != nullptr) {
-            if (temp->nama == hapusNama) {
-                if (prev == nullptr) {
-                    head = temp->next;
-                } else {
-                    prev->next = temp->next;
-                }
-                delete temp;
-                cout << "Buah berhasil dihapus.\n";
-                ditemukan = true;
-                break;
+    Buah* temp = head;
+    Buah* prev = nullptr;
+    bool ditemukan = false;
+    // ... (Logika penghapusan tetap sama)
+    while (temp != nullptr) {
+        if (temp->nama == hapusNama) {
+            if (prev == nullptr) {
+                head = temp->next;
+            } else {
+                prev->next = temp->next;
             }
-            prev = temp;
-            temp = temp->next;
+            delete temp;
+            cout << "\nBuah '" << hapusNama << "' berhasil dihapus.\n";
+            ditemukan = true;
+            break;
         }
-        if (!ditemukan) {
-            cout << "Buah tidak ditemukan.\n";
-        }
-        cout << "Hapus buah lagi? (y/n): ";
-        cin >> ulang;
-        cin.ignore();
-    } while (ulang == 'y' || ulang == 'Y');
+        prev = temp;
+        temp = temp->next;
+    }
+    if (!ditemukan) {
+        cout << "\nBuah dengan nama '" << hapusNama << "' tidak ditemukan.\n";
+    }
+
+    // DIHAPUS: Perulangan "Hapus buah lagi? (y/n)".
 }
 
-int main() {
-    Buah* head = nullptr;
-    int pilihan;
-    do {
-        cout << "\n=== Menu Inventori ===\n" << endl;
-        cout << "1. Tambah Buah\n" << endl;
-        cout << "2. Daftar Buah\n" << endl;
-        cout << "3. Cari Buah\n" << endl;
-        cout << "4. Hapus Buah\n" << endl;
-        cout << "0. Keluar\n" << endl;
-        cout << "Pilih menu: ";
-        cin >> pilihan;
-
-        switch(pilihan) {
-            case 1:
-                cout << "Fitur Tambah buah\n";
-                tambahBuah(head);
-                break;
-            case 2:
-                cout << "Fitur Daftar buah\n";
-                daftarBuah(head);
-                break;
-            case 3:
-                cout << "Fitur Cari buah\n";
-                cariBuah(head);
-                break;
-            case 4:
-                cout << "Fitur Hapus buah\n";
-                hapusBuah(head);
-                break;
-            case 0:
-                cout << "Keluar dari program.\n";
-                break;
-            default:
-                cout << "Pilihan tidak valid.\n";
-        }
-        cout << endl;
-    } while(pilihan != 0);
-
-    while (head != nullptr) {
-        Buah* hapus = head;
-        head = head->next;
-        delete hapus;
+// --- FUNGSI BARU ---
+// DITAMBAHKAN: Seluruh blok fungsi untuk mengurutkan daftar buah.
+void urutkanBuah(Buah* head) {
+    if (head == nullptr || head->next == nullptr) {
+        cout << "\nTidak cukup buah untuk diurutkan.\n";
+        return;
     }
-    return 0;
+    int kriteria;
+    cout << "\n--- Urutkan Berdasarkan ---\n";
+    cout << "1. Nama (A-Z)\n";
+    cout << "2. Jumlah (Sedikit ke Banyak)\n";
+    cout << "Pilih kriteria: ";
+    cin >> kriteria;
+
+    if (kriteria != 1 && kriteria != 2) {
+        cout << "\n[ERROR] Pilihan kriteria tidak valid.\n";
+        return;
+    }
+
+    bool ditukar;
+    do {
+        ditukar = false;
+        Buah* current = head;
+        while (current->next != nullptr) {
+            bool harusTukar = false;
+            if (kriteria == 1 && current->nama > current->next->nama) {
+                harusTukar = true;
+            } else if (kriteria == 2 && current->jumlah > current->next->jumlah) {
+                harusTukar = true;
+            }
+            
+            if (harusTukar) {
+                tukarData(current, current->next);
+                ditukar = true;
+            }
+            current = current->next;
+        }
+    } while (ditukar);
+
+    cout << "\nDaftar buah berhasil diurutkan!\n";
+    cout << "Pilih menu '2. Lihat Daftar Buah' untuk melihat hasilnya.\n";
+}
+
+// --- FUNGSI BARU ---
+// DITAMBAHKAN: Fungsi pembantu untuk menukar data, digunakan oleh urutkanBuah.
+void tukarData(Buah* a, Buah* b) {
+    string tempNama = a->nama;
+    int tempJumlah = a->jumlah;
+    a->nama = b->nama;
+    a->jumlah = b->jumlah;
+    b->nama = tempNama;
+    b->jumlah = tempJumlah;
 }
